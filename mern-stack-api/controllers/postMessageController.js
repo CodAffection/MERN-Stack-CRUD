@@ -43,14 +43,17 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async(req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No record with given id : ' + req.params.id)
 
-    PostMessage.findByIdAndRemove(req.params.id, (err, docs) => {
-        if (!err) res.send(docs)
-        else console.log('Error while deleting a record : ' + JSON.stringify(err, undefined, 2))
-    })
+    try{    
+       const deletedDoc = await PostMessage.findByIdAndRemove(req.params.id) 
+       res.send(deletedDoc)
+    }catch(err){
+        console.log('Error while deleting a record : ' + JSON.stringify(err, undefined, 2))
+    }    
+    
 })
 
 

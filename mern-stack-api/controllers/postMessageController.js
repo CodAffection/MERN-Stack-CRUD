@@ -13,16 +13,18 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', async(req, res) => {
     var newRecord = new PostMessage({
         title: req.body.title,
         message: req.body.message
     })
-
-    newRecord.save((err, docs) => {
-        if (!err) res.send(docs)
-        else console.log('Error while creating new record : ' + JSON.stringify(err, undefined, 2))
-    })
+  try{
+     const newDoc = await PostMessage.create(newRecord)
+     console.log(newDoc) 
+  }catch(err){
+    console.log('Error while creating new record : ' + JSON.stringify(err, undefined, 2)) 
+  }
+   
 })
 
 router.put('/:id', (req, res) => {
